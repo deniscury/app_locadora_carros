@@ -18,7 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('marca', 'ClienteController');
+Route::apiResource('marca', 'MarcaController');
 Route::apiResource('modelo', 'ModeloController');
 Route::apiResource('carro', 'CarroController');
 Route::apiResource('cliente', 'ClienteController');
