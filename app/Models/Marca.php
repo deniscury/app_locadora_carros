@@ -11,10 +11,14 @@ class Marca extends Model
 
     protected $fillable = ['nome', 'imagem'];
 
+    public function modelos(){
+        return $this->hasMany('App\Models\Modelo');        
+    }
+
     public function rules(){
         return array(
             'nome' => 'required|unique:marcas,nome,'.$this->id.'|min:3',
-            'imagem' => 'required'
+            'imagem' => 'required|file|mimes:png,jpg,jpeg'
         );
         /**
          * Parâmetros regras UNIQUE
@@ -30,7 +34,8 @@ class Marca extends Model
         return array(
             'required' => 'O campo :attribute é obrigatório',
             'nome.unique' => 'Marca já existe no sistema.',
-            'nome.min' => 'O nome da marca precisa ter no mínimo 3 caracteres.'
+            'nome.min' => 'O nome da marca precisa ter no mínimo 3 caracteres.',
+            'imagem.mimes' => 'A imagem precisa ter um dos seguintes formatos: PNG, JPG, JPEG'
 	    );
     }
 }

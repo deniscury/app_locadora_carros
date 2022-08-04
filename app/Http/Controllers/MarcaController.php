@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use App\Models\Marca;
 use Illuminate\Http\Request;
 
@@ -28,8 +29,8 @@ class MarcaController extends Controller
      */
     public function index()
     {
-        $marca = $this->getMarca()->all();
-
+        $marca = $this->getMarca()->with('modelos')->get();
+        
         return response()->json(
             array(
                 'erro' => false,
@@ -48,8 +49,25 @@ class MarcaController extends Controller
     public function store(Request $request)
     {
         $request->validate($this->getMarca()->rules(), $this->getMarca()->feedback());
-        
-        $marca = $this->getMarca()->create($request->all());
+
+        // MIME TYPE TEXT
+        //dd($request->nome);
+        //dd($request->get('nome');
+        //dd($request->input('nome'));
+
+        // MIME TYPE FILE
+        //dd($request->imagem));
+        //dd($request->file('imagem'));
+
+        $img = $request->file('imagem');
+        $imagem_urn = $img->store('imagens/marcas', 'public');
+
+        $params = array(
+            'nome' => $request->nome,
+            'imagem' => $imagem_urn
+        );
+
+        $marca = $this->getMarca()->create($params);
 
         return response()->json(
             array(
@@ -68,7 +86,7 @@ class MarcaController extends Controller
      */
     public function show($id)
     {
-        $marca = $this->getMarca()->find($id);
+        $marca = $this->getMarca()->with('modelos')->find($id);
 
         if ($marca === null){            
             return response()->json(
@@ -125,8 +143,19 @@ class MarcaController extends Controller
         else{
             $request->validate($marca->rules(), $marca->feedback());
         }
+        
+        $img = $request->file('imagem');
 
-        $marca->update($request->all());
+        if ($img !== null){
+            Storage::disk('public')->delete($marca->imagem);
+
+            $imagem_urn = $img->store('imagens/marcas', 'public');
+        }
+
+        $marca->fill($request->all());
+        $marca->imagem = isset($imagem_urn)?$imagem_urn:$marca->imagem;
+
+        $marca->save();
 
         return response()->json(
             array(
@@ -156,6 +185,8 @@ class MarcaController extends Controller
                 404
             );
         }
+
+        Storage::disk('public')->delete($marca->imagem);
         
         $marca->delete();
         
