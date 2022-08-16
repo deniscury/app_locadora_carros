@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Storage;
-use App\Models\Modelo;
 use Illuminate\Http\Request;
+
+use App\Models\Modelo;
+use App\Repositories\ModeloRepository;
 
 class ModeloController extends Controller
 {
@@ -27,14 +29,41 @@ class ModeloController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $modelo = $this->getModelo()->with('marca')->get();
+        $modelos = array();
+        $atributos_marca = 'marca';
+        $atributos_carros = 'carros';
+
+        $modelo_repository = new ModeloRepository($this->getModelo());
+
+        if ($request->has('atributos_marca')){
+            $atributos_marca = $atributos_marca.':id,'.$request->atributos_marca;
+        }
+        
+        $modelo_repository->selectRelacionados($atributos_marca);
+
+        if ($request->has('atributos_carros')){
+            $atributos_carros = $atributos_carros.':modelo_id,'.$request->atributos_carros;
+        }
+        
+        $modelo_repository->selectRelacionados($atributos_carros);
+
+        if ($request->has('filtros')){
+            $modelo_repository->filtrar($request->filtros);
+        }
+
+        if ($request->has('atributos')){
+            $atributos = 'id,marca_id,'.$request->atributos;
+            $modelo_repository->selectAtributos($atributos);
+        }
+
+        $modelos = $modelo_repository->getModel()->get();
 
         return response()->json(
             array(
                 'erro' => false,
-                'retorno' => $modelo
+                'retorno' => $modelos
             ),
             200
         );
@@ -83,7 +112,7 @@ class ModeloController extends Controller
      */
     public function show($id)
     {
-        $modelo = $this->getModelo()->with('marca')->find($id);
+        $modelo = $this->getModelo()->with('marca')->with('carros')->find($id);
 
         if ($modelo === null){            
             return response()->json(

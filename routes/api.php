@@ -14,12 +14,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+/*Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});*/
+
+Route::post('login', 'AuthController@login');
+
+// Adiciona um prefix para versionamento da url das apis
+
+Route::prefix('v1')->middleware('jwt.auth')->group(function(){
+    Route::apiResource('marca', 'MarcaController');
+    Route::apiResource('modelo', 'ModeloController');
+    Route::apiResource('carro', 'CarroController');
+    Route::apiResource('cliente', 'ClienteController');
+    Route::apiResource('locacao', 'LocacaoController');
+    Route::post('me', 'AuthController@me');
+    Route::post('refresh', 'AuthController@refresh');
+    Route::post('logout', 'AuthController@logout');
 });
 
-Route::apiResource('marca', 'MarcaController');
-Route::apiResource('modelo', 'ModeloController');
-Route::apiResource('carro', 'CarroController');
-Route::apiResource('cliente', 'ClienteController');
-Route::apiResource('locacao', 'LocacaoController');
