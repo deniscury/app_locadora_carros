@@ -16,3 +16,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/veiculos/marcas', function(){
+        return view('veiculos.marcas');
+    })
+    ->name('marcas')
+    ->middleware('auth');
