@@ -58,9 +58,7 @@ class CarroController extends Controller
             $carro_repository->selectAtributos($atributos);
         }
 
-        $carros = $carro_repository->getModel()->get();
-
-        return response()->json($carros, 200);
+        return response()->json($carro_repository->getResultadoPaginado(3), 200);
 
     }
 

@@ -50,10 +50,8 @@ class MarcaController extends Controller
             $atributos = 'id,'.$request->atributos;
             $marca_repository->selectAtributos($atributos);
         }
-
-        $marcas = $marca_repository->getModel()->get();
         
-        return response()->json($marcas, 200);
+        return response()->json($marca_repository->getResultadoPaginado(3), 200);
     }
 
     /**

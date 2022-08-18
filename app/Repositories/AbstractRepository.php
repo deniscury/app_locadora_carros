@@ -37,6 +37,14 @@ abstract class AbstractRepository{
     public function setModel($model){
         $this->model = $model;
     }
+
+    public function getResultado(){
+        return $this->getModel()->get();
+    }
+
+    public function getResultadoPaginado($registros_por_pagina){
+        return $this->getModel()->paginate($registros_por_pagina);
+    }
 }
 
 ?>

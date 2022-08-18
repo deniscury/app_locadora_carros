@@ -58,10 +58,7 @@ class ModeloController extends Controller
             $modelo_repository->selectAtributos($atributos);
         }
 
-        $modelos = $modelo_repository->getModel()->get();
-
-        return response()->json($modelos, 200);
-
+        return response()->json($modelo_repository->getResultadoPaginado(3), 200);
     }
 
     /**

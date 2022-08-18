@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-10">
 
                 <!-- Ínicio - Form de busca -->
                 <card-component
@@ -14,7 +14,7 @@
                                         label="ID"
                                         help="idHelp"
                                         msg-help="Informe o ID da marca">
-                                            <input type="number" class="form-control" id="id" aria-describedby="idHelp" placeholder="ID">
+                                            <input type="number" class="form-control" id="id" aria-describedby="idHelp" placeholder="ID" v-model="busca.id">
                                     </input-container-component>
                                 </div>
                                 <div class="col mb-3">
@@ -23,13 +23,13 @@
                                         label="Nome"
                                         help="nomeHelp"
                                         msg-help="Informe o nome da marca">
-                                            <input type="text" class="form-control" id="nome" aria-describedby="nomeHelp" placeholder="Nome">
+                                            <input type="text" class="form-control" id="nome" aria-describedby="nomeHelp" placeholder="Nome" v-model="busca.nome">
                                     </input-container-component>
                                 </div>
                             </div>
                         </template>
                         <template v-slot:rodape>
-                            <button type="submit" class="btn btn-primary btn-sm float-right">Buscar</button>
+                            <button type="submit" class="btn btn-primary btn-sm float-right" @click="buscar()">Buscar</button>
                         </template>
                 </card-component>              
                 <!-- Fim - Form de busca -->
@@ -39,7 +39,22 @@
                     titulo="Lista de Marcas">
                         <template v-slot:conteudo>
                             <table-component
-                                :dados="marcas"
+                                :dados="marcas.data"
+                                :visualizar="{
+                                    exibir: true,
+                                    dataToggle: 'modal',
+                                    dataTarget: '#modal-visualizar'
+                                }"
+                                :atualizar="{
+                                    exibir: true,
+                                    dataToggle: 'modal',
+                                    dataTarget: '#modal-atualizar'
+                                }"
+                                :excluir="{
+                                    exibir: true,
+                                    dataToggle: 'modal',
+                                    dataTarget: '#modal-excluir'
+                                }"
                                 :titulos="{
                                     id : {titulo : 'ID', tipo : 'text'},
                                     nome : {titulo : 'Nome', tipo : 'text'},
@@ -48,13 +63,25 @@
                                     updated_at :{titulo : 'Data de Alteração', tipo : 'date'},
                                 }"></table-component>
                         </template>
+
                         <template v-slot:rodape>
-                            <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#modal-marca">Adicionar</button>
+                            <div class="row">
+                                <div class="col-10">
+                                    <paginate-component> 
+                                        <li :class="'page-item'+(link.active? ' active' : '')" v-for="link, key in marcas.links" :key="key" @click="paginacao(link)">
+                                            <a class="page-link" v-html="link.label"></a>
+                                        </li>
+                                    </paginate-component> 
+                                </div>
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#modal-marca">Adicionar</button>
+                                </div>
+                            </div>
                         </template>
                 </card-component>  
                 <!-- Fim - Tabela -->
 
-                <!-- Ínicio - Modal -->
+                <!-- Ínicio - Modal Inclusão de Marca -->
                 <modal-component
                     titulo="Adicionar Marca"
                     id="modal-marca">
@@ -92,7 +119,42 @@
                             <button type="button" class="btn btn-primary" @click="salvar()">Salvar</button>
                         </template>
                 </modal-component>
-                <!-- Fim - Modal -->
+                <!-- Fim - Modal Inclusão de Marca -->
+
+                <!-- Ínicio - Modal Visualizar de Marca -->
+                <modal-component
+                    titulo="Visualizar Marca"
+                    id="modal-visualizar">
+                        <template v-slot:alertas></template>
+                        <template v-slot:conteudo>
+                            <div class="form-row">
+                                <div class="col-4 mb-3">
+                                    <input-container-component label="ID">
+                                        <input type="text" class="form-control" :value="$store.state.item.id" disabled>
+                                    </input-container-component>
+                                </div>
+                                <div class="col-4 mb-3">
+                                    <input-container-component label="Nome">
+                                        <input type="text" class="form-control" :value="$store.state.item.nome" disabled>
+                                    </input-container-component>
+                                </div>
+                                <div class="col-4 mb-3">
+                                    <input-container-component label="Data de Criação">
+                                        <input type="text" class="form-control" :value="$store.state.item.created_at" disabled>
+                                    </input-container-component>
+                                </div>
+                            </div>
+                            <div class="form-row text-center">
+                                <div class="col-12 mb-3">
+                                    <input-container-component>
+                                        <img v-if="$store.state.item.imagem" :src="'/storage/'+$store.state.item.imagem"/>
+                                    </input-container-component>
+                                </div>
+                            </div>
+                        </template>
+                        <template v-slot:rodape></template>
+                </modal-component>
+                <!-- Fim - Modal Visualizar de Marca -->
 
             </div>
         </div>       
@@ -103,11 +165,14 @@
         data(){
             return{
                 urlBase: 'http://localhost:8000/api/v1/marca',
+                urlPaginacao: '',
+                urlFiltro: '',
                 nomeMarca: '',
                 arquivoImagem: [],
                 alerta: false,
                 retorno: false,
-                marcas: []
+                marcas: { data : [] },
+                busca: {id: '', nome: ''}
             }
         },
         methods:{
@@ -115,6 +180,8 @@
                 this.arquivoImagem = e.target.files;
             },
             listar(){
+                let url = this.urlBase+'?'+this.urlPaginacao+this.urlFiltro;
+
                 let config = {
                     headers : {
                         'Accept' : 'application/json',
@@ -122,7 +189,7 @@
                     }
                 }
 
-                axios.get(this.urlBase, config)
+                axios.get(url, config)
                     .then(response => {
                         this.marcas = response.data;
                     })
@@ -130,6 +197,34 @@
                         console.log(errors);
                     }
                 );
+            },
+            paginacao(link){
+                if (link.url){
+                    let parametro = link.url.split('?');
+
+                    this.urlPaginacao = parametro[1];
+
+                    this.listar();
+                }
+            },
+            buscar(){
+                let filtro = '';
+
+                for(let chave in this.busca){
+                    if (this.busca[chave]){
+                        filtro += (filtro == '' ? '' : ';')+chave+':like:'+this.busca[chave];
+                    }
+                }
+
+                if (filtro !== ''){  
+                    this.urlPaginacao =  'page=1'             
+                    this.urlFiltro = '&filtros='+filtro;
+                }
+                else{
+                    this.urlFiltro = '';
+                }
+
+                this.listar();
             },
             salvar(){
                 let formData = new FormData();

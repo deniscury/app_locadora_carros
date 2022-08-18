@@ -58,9 +58,7 @@ class LocacaoController extends Controller
             $locacao_repository->selectAtributos($atributos);
         }
 
-        $locacoes = $locacao_repository->getModel()->get();
-
-        return response()->json($locacoes, 200);
+        return response()->json($locacao_repository->getResultadoPaginado(3), 200);
 
     }
 
