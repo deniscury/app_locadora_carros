@@ -53,13 +53,7 @@ class MarcaController extends Controller
 
         $marcas = $marca_repository->getModel()->get();
         
-        return response()->json(
-            array(
-                'erro' => false,
-                'retorno' => $marcas
-            ),
-            200
-        );
+        return response()->json($marcas, 200);
     }
 
     /**
@@ -91,13 +85,7 @@ class MarcaController extends Controller
 
         $marca = $this->getMarca()->create($params);
 
-        return response()->json(
-            array(
-                'erro' => false,
-                'retorno' => $marca
-            ),
-            201
-        );
+        return response()->json($marca, 201);
     }
 
     /**
@@ -113,20 +101,12 @@ class MarcaController extends Controller
         if ($marca === null){            
             return response()->json(
                 array(
-                    'erro' => true,
-                    'msg' => 'Marca não encontrada.'
-                ),
-                404
-            );
+                    'erro' => 'Marca não encontrada.'
+                ), 
+            404);
         }
 
-        return response()->json(
-            array(
-                'erro' => false,
-                'retorno' => $marca
-            ),
-            200
-        );
+        return response()->json($marca, 200);
     }
 
     /**
@@ -139,15 +119,13 @@ class MarcaController extends Controller
     public function update(Request $request, $id)
     {
         $marca = $this->getMarca()->find($id);
-
-        if ($marca === null){
+        
+        if ($marca === null){            
             return response()->json(
                 array(
-                    'erro' => true,
-                    'msg' => 'Marca não encontrada.'
-                ),
-                404
-            );
+                    'erro' => 'Marca não encontrada.'
+                ), 
+            404);
         }
 
         if ($request->method() === 'PATCH'){
@@ -179,13 +157,7 @@ class MarcaController extends Controller
 
         $marca->save();
 
-        return response()->json(
-            array(
-                'erro' => false,
-                'retorno' => $marca
-            ),
-            200
-        );
+        return response()->json($marca, 200);
     }
 
     /**
@@ -197,15 +169,13 @@ class MarcaController extends Controller
     public function destroy($id)
     {
         $marca = $this->getMarca()->find($id);
-
-        if ($marca === null){
+        
+        if ($marca === null){            
             return response()->json(
                 array(
-                    'erro' => true,
-                    'msg' => 'Marca não encontrada.'
-                ),
-                404
-            );
+                    'erro' => 'Marca não encontrada.'
+                ), 
+            404);
         }
 
         Storage::disk('public')->delete($marca->imagem);
@@ -214,12 +184,8 @@ class MarcaController extends Controller
         
         return response()->json(
             array(
-                'erro' => false,
-                'retorno' => [
-                    'msg' => 'Marca excluída com sucesso.'
-                ]
+                'msg' => 'Marca excluída com sucesso.'
             ),
-            200
-        );
+        200);
     }
 }

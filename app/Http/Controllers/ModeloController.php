@@ -60,13 +60,7 @@ class ModeloController extends Controller
 
         $modelos = $modelo_repository->getModel()->get();
 
-        return response()->json(
-            array(
-                'erro' => false,
-                'retorno' => $modelos
-            ),
-            200
-        );
+        return response()->json($modelos, 200);
 
     }
 
@@ -94,14 +88,8 @@ class ModeloController extends Controller
         );
 
         $modelo = $this->getModelo()->create($params);
-
-        return response()->json(
-            array(
-                'erro' => false,
-                'retorno' => $modelo
-            ),
-            201
-        );
+        
+        return response()->json($modelo, 201);
     }
 
     /**
@@ -113,24 +101,16 @@ class ModeloController extends Controller
     public function show($id)
     {
         $modelo = $this->getModelo()->with('marca')->with('carros')->find($id);
-
+        
         if ($modelo === null){            
             return response()->json(
                 array(
-                    'erro' => true,
-                    'msg' => 'Modelo não encontrado.'
-                ),
-                404
-            );
+                    'erro' => 'Modelo não encontrado.'
+                ), 
+            404);
         }
-
-        return response()->json(
-            array(
-                'erro' => false,
-                'retorno' => $modelo
-            ),
-            200
-        );
+        
+        return response()->json($modelo, 200);
     }
     
     /**
@@ -143,15 +123,13 @@ class ModeloController extends Controller
     public function update(Request $request, $id)
     {
         $modelo = $this->getModelo()->find($id);
-
-        if ($modelo === null){
+        
+        if ($modelo === null){            
             return response()->json(
                 array(
-                    'erro' => true,
-                    'msg' => 'Modelo não encontrado.'
-                ),
-                404
-            );
+                    'erro' => 'Modelo não encontrado.'
+                ), 
+            404);
         }
 
         if ($request->method() === 'PATCH'){
@@ -182,14 +160,8 @@ class ModeloController extends Controller
         $modelo->imagem = isset($imagem_urn)?$imagem_urn:$modelo->imagem;
 
         $modelo->save();
-
-        return response()->json(
-            array(
-                'erro' => false,
-                'retorno' => $modelo
-            ),
-            200
-        );
+        
+        return response()->json($modelo, 200);
     }
 
     /**
@@ -201,15 +173,13 @@ class ModeloController extends Controller
     public function destroy($id)
     {
         $modelo = $this->getModelo()->find($id);
-
-        if ($modelo === null){
+        
+        if ($modelo === null){            
             return response()->json(
                 array(
-                    'erro' => true,
-                    'msg' => 'Modelo não encontrado.'
-                ),
-                404
-            );
+                    'erro' => 'Modelo não encontrado.'
+                ), 
+            404);
         }
 
         Storage::disk('public')->delete($modelo->imagem);
@@ -218,12 +188,8 @@ class ModeloController extends Controller
         
         return response()->json(
             array(
-                'erro' => false,
-                'retorno' => [
-                    'msg' => 'Modelo excluído com sucesso.'
-                ]
+                'msg' => 'Modelo excluído com sucesso.'
             ),
-            200
-        );
+        200);
     }
 }

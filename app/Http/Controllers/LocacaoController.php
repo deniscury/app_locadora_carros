@@ -60,13 +60,7 @@ class LocacaoController extends Controller
 
         $locacoes = $locacao_repository->getModel()->get();
 
-        return response()->json(
-            array(
-                'erro' => false,
-                'retorno' => $locacoes
-            ),
-            200
-        );
+        return response()->json($locacoes, 200);
 
     }
 
@@ -93,13 +87,7 @@ class LocacaoController extends Controller
 
         $locacao = $this->getLocacao()->create($params);
 
-        return response()->json(
-            array(
-                'erro' => false,
-                'retorno' => $locacao
-            ),
-            201
-        );
+        return response()->json($locacao, 201);
     }
 
     /**
@@ -115,20 +103,12 @@ class LocacaoController extends Controller
         if ($locacao === null){            
             return response()->json(
                 array(
-                    'erro' => true,
-                    'msg' => 'Locação não encontrado.'
-                ),
-                404
-            );
+                    'erro' => 'Locação não encontrada.'
+                ), 
+            404);
         }
 
-        return response()->json(
-            array(
-                'erro' => false,
-                'retorno' => $locacao
-            ),
-            200
-        );
+        return response()->json($locacao, 200);
     }
 
     /**
@@ -142,14 +122,12 @@ class LocacaoController extends Controller
     {
         $locacao = $this->getLocacao()->find($id);
 
-        if ($locacao === null){
+        if ($locacao === null){            
             return response()->json(
                 array(
-                    'erro' => true,
-                    'msg' => 'Locação não encontrada.'
-                ),
-                404
-            );
+                    'erro' => 'Locação não encontrada.'
+                ), 
+            404);
         }
 
         if ($request->method() === 'PATCH'){
@@ -170,14 +148,8 @@ class LocacaoController extends Controller
         
         $locacao->fill($request->all());
         $locacao->save();
-
-        return response()->json(
-            array(
-                'erro' => false,
-                'retorno' => $locacao
-            ),
-            200
-        );
+        
+        return response()->json($locacao, 200);
     }
 
     /**
@@ -190,26 +162,20 @@ class LocacaoController extends Controller
     {
         $locacao = $this->getLocacao()->find($id);
 
-        if ($locacao === null){
+        if ($locacao === null){            
             return response()->json(
                 array(
-                    'erro' => true,
-                    'msg' => 'Locação não encontrada.'
-                ),
-                404
-            );
+                    'erro' => 'Locação não encontrada.'
+                ), 
+            404);
         }
         
         $locacao->delete();
         
         return response()->json(
             array(
-                'erro' => false,
-                'retorno' => [
-                    'msg' => 'Locação excluída com sucesso.'
-                ]
+                'msg' => 'Locação excluída com sucesso.'
             ),
-            200
-        );
+        200);
     }
 }

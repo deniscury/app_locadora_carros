@@ -60,13 +60,7 @@ class CarroController extends Controller
 
         $carros = $carro_repository->getModel()->get();
 
-        return response()->json(
-            array(
-                'erro' => false,
-                'retorno' => $carros
-            ),
-            200
-        );
+        return response()->json($carros, 200);
 
     }
 
@@ -89,13 +83,7 @@ class CarroController extends Controller
 
         $carro = $this->getCarro()->create($params);
 
-        return response()->json(
-            array(
-                'erro' => false,
-                'retorno' => $carro
-            ),
-            201
-        );
+        return response()->json($carro, 201);
     }
 
     /**
@@ -111,20 +99,12 @@ class CarroController extends Controller
         if ($carro === null){            
             return response()->json(
                 array(
-                    'erro' => true,
-                    'msg' => 'Carro não encontrado.'
-                ),
-                404
-            );
+                    'erro' => 'Carro não encontrado.'
+                ), 
+            404);
         }
-
-        return response()->json(
-            array(
-                'erro' => false,
-                'retorno' => $carro
-            ),
-            200
-        );
+        
+        return response()->json($carro, 200);
     }
 
     /**
@@ -138,14 +118,12 @@ class CarroController extends Controller
     {
         $carro = $this->getCarro()->find($id);
 
-        if ($carro === null){
+        if ($carro === null){            
             return response()->json(
                 array(
-                    'erro' => true,
-                    'msg' => 'Carro não encontrado.'
-                ),
-                404
-            );
+                    'erro' => 'Carro não encontrado.'
+                ), 
+            404);
         }
 
         if ($request->method() === 'PATCH'){
@@ -166,14 +144,8 @@ class CarroController extends Controller
         
         $carro->fill($request->all());
         $carro->save();
-
-        return response()->json(
-            array(
-                'erro' => false,
-                'retorno' => $carro
-            ),
-            200
-        );
+        
+        return response()->json($carro, 200);
     }
 
     /**
@@ -186,26 +158,20 @@ class CarroController extends Controller
     {
         $carro = $this->getCarro()->find($id);
 
-        if ($carro === null){
+        if ($carro === null){            
             return response()->json(
                 array(
-                    'erro' => true,
-                    'msg' => 'Carro não encontrado.'
-                ),
-                404
-            );
+                    'erro' => 'Carro não encontrado.'
+                ), 
+            404);
         }
         
         $carro->delete();
         
         return response()->json(
             array(
-                'erro' => false,
-                'retorno' => [
-                    'msg' => 'Carro excluído com sucesso.'
-                ]
+                'msg' => 'Carro excluído com sucesso.'
             ),
-            200
-        );
+        200);
     }
 }

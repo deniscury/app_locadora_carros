@@ -53,13 +53,7 @@ class ClienteController extends Controller
 
         $clientes = $cliente_repository->getModel()->get();
 
-        return response()->json(
-            array(
-                'erro' => false,
-                'retorno' => $clientes
-            ),
-            200
-        );
+        return response()->json($clientes, 200);
 
     }
 
@@ -79,13 +73,7 @@ class ClienteController extends Controller
 
         $cliente = $this->getCliente()->create($params);
 
-        return response()->json(
-            array(
-                'erro' => false,
-                'retorno' => $cliente
-            ),
-            201
-        );
+        return response()->json($cliente, 201);
     }
 
     /**
@@ -101,20 +89,12 @@ class ClienteController extends Controller
         if ($cliente === null){            
             return response()->json(
                 array(
-                    'erro' => true,
-                    'msg' => 'Cliente não encontrado.'
-                ),
-                404
-            );
+                    'erro' => 'Cliente não encontrado.'
+                ), 
+            404);
         }
 
-        return response()->json(
-            array(
-                'erro' => false,
-                'retorno' => $cliente
-            ),
-            200
-        );
+        return response()->json($cliente, 200);
     }
 
     /**
@@ -128,14 +108,12 @@ class ClienteController extends Controller
     {
         $cliente = $this->getCliente()->find($id);
 
-        if ($cliente === null){
+        if ($cliente === null){            
             return response()->json(
                 array(
-                    'erro' => true,
-                    'msg' => 'Cliente não encontrado.'
-                ),
-                404
-            );
+                    'erro' => 'Cliente não encontrado.'
+                ), 
+            404);
         }
 
         if ($request->method() === 'PATCH'){
@@ -157,13 +135,7 @@ class ClienteController extends Controller
         $cliente->fill($request->all());
         $cliente->save();
 
-        return response()->json(
-            array(
-                'erro' => false,
-                'retorno' => $cliente
-            ),
-            200
-        );
+        return response()->json($cliente, 200);
     }
 
     /**
@@ -176,26 +148,20 @@ class ClienteController extends Controller
     {
         $cliente = $this->getCliente()->find($id);
 
-        if ($cliente === null){
+        if ($cliente === null){            
             return response()->json(
                 array(
-                    'erro' => true,
-                    'msg' => 'Cliente não encontrado.'
-                ),
-                404
-            );
+                    'erro' => 'Cliente não encontrado.'
+                ), 
+            404);
         }
         
         $cliente->delete();
         
         return response()->json(
             array(
-                'erro' => false,
-                'retorno' => [
-                    'msg' => 'Cliente excluído com sucesso.'
-                ]
+                'msg' => 'Cliente excluído com sucesso.'
             ),
-            200
-        );
+        200);
     }
 }
