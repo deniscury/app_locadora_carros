@@ -14,7 +14,7 @@
                             <img :src="'/storage/'+val" width="30" height="30"/>
                         </span>
                         <span v-else-if="titulos[key].tipo=='date'">
-                            --- {{ val }} ---
+                            {{ val | formataDataHora }}
                         </span>
                         <span v-else>
                             {{val}}
@@ -23,12 +23,12 @@
                     <td v-if="(visualizar.exibir || atualizar.exibir || excluir.exibir)">
                         <div class="btn-group">
                             <button v-if="visualizar.exibir" class="btn btn-primary btn-sm rounded mr-2" @click="setStore(obj)" :data-toggle="visualizar.dataToggle" :data-target="visualizar.dataTarget">
-                                    Visualizar
-                                </button>
-                            <button v-if="atualizar.exibir" class="btn btn-success btn-sm rounded mr-2" :data-toggle="atualizar.dataToggle" :data-target="atualizar.dataTarget">
+                                Visualizar
+                            </button>
+                            <button v-if="atualizar.exibir" class="btn btn-success btn-sm rounded mr-2" @click="setStore(obj)" :data-toggle="atualizar.dataToggle" :data-target="atualizar.dataTarget">
                                 Atualizar
                             </button>
-                            <button v-if="excluir.exibir" class="btn btn-danger btn-sm rounded mr-2" :data-toggle="excluir.dataToggle" :data-target="excluir.dataTarget">
+                            <button v-if="excluir.exibir" class="btn btn-danger btn-sm rounded mr-2" @click="setStore(obj)" :data-toggle="excluir.dataToggle" :data-target="excluir.dataTarget">
                                 Excluir
                             </button>
                         </div>
@@ -42,8 +42,28 @@
 <script>
     export default {
         props: ['dados', 'titulos', 'visualizar', 'atualizar', 'excluir'],
+        /*filters:{
+            formataDataHora(d){
+                if (!d){
+                    return '';
+                }
+                
+                d = d.split('T');
+
+                let data = d[0];
+                let hora = d[1].substring(0, 8);
+
+                data = data.split('-');
+                data = data[2]+'/'+data[1]+'/'+data[0];
+
+                let retorno = data+' '+hora; 
+
+                return retorno;
+            }
+        },*/
         methods:{
             setStore(obj){
+                this.$store.state.alerta = false; 
                 this.$store.state.item = obj;
             }
         },

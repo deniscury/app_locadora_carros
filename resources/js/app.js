@@ -8,6 +8,7 @@ require('./bootstrap');
 
 window.Vue = require('vue').default;
 
+import Vue from 'vue';
 /*
     Importando e configurando o vuex
 */
@@ -18,7 +19,8 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
     state:{
-        item: {}
+        item: {},
+        alerta: false
     }
 });
 
@@ -49,6 +51,23 @@ Vue.component('paginate-component', require('./components/Paginate.vue').default
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+Vue.filter('formataDataHora', function(d){
+    if (!d){
+        return '';
+    }
+    
+    d = d.split('T');
+
+    let data = d[0];
+    let hora = d[1].substring(0, 8);
+
+    data = data.split('-');
+    data = data[2]+'/'+data[1]+'/'+data[0];
+
+    let retorno = data+' '+hora; 
+
+    return retorno;
+});
 
 const app = new Vue({
     el: '#app',

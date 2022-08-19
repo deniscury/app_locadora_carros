@@ -74,7 +74,7 @@
                                     </paginate-component> 
                                 </div>
                                 <div class="col-2">
-                                    <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#modal-marca">Adicionar</button>
+                                    <button type="button" class="btn btn-primary btn-sm float-right" @click="$store.state.alerta = false;" data-toggle="modal" data-target="#modal-marca">Adicionar</button>
                                 </div>
                             </div>
                         </template>
@@ -86,7 +86,7 @@
                     titulo="Adicionar Marca"
                     id="modal-marca">
                         <template v-slot:alertas>
-                            <alert-component v-if="alerta==true"
+                            <alert-component v-if="$store.state.alerta"
                                 :titulo="titulo"
                                 :tipo="tipo"
                                 :retorno="retorno">
@@ -115,13 +115,53 @@
                             </div>
                         </template>
                         <template v-slot:rodape>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                             <button type="button" class="btn btn-primary" @click="salvar()">Salvar</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                         </template>
                 </modal-component>
                 <!-- Fim - Modal Inclusão de Marca -->
 
-                <!-- Ínicio - Modal Visualizar de Marca -->
+                <!-- Ínicio - Modal Atualização de Marca -->
+                <modal-component
+                    titulo="Atualizar Marca"
+                    id="modal-atualizar">
+                        <template v-slot:alertas>
+                            <alert-component v-if="$store.state.alerta"
+                                :titulo="titulo"
+                                :tipo="tipo"
+                                :retorno="retorno">
+                            </alert-component>
+                        </template>
+
+                        <template v-slot:conteudo>
+                            <div class="col mb-3">
+                                <input-container-component
+                                    id="atualizarNome"
+                                    label="Nome"
+                                    help="atualizarNomeHelp"
+                                    msg-help="Informe o nome da marca">
+                                        <input type="text" class="form-control" id="atualizarNome" v-model="$store.state.item.nome" aria-describedby="atualizarNomeHelp" placeholder="Nome da Marca">
+                                </input-container-component>
+                            </div>
+
+                            <div class="col mb-3">
+                                <input-container-component
+                                    id="atualizarImagem"
+                                    label="Imagem"
+                                    help="atualizarImagemHelp"
+                                    msg-help="Selecione uma imagem no formato PNG">
+                                        <input type="file" class="form-control-file" id="atualizarImagem" aria-describedby="atualizarImagemHelp" @change="carregarImagem($event)">
+                                </input-container-component>
+                            </div>
+                        </template>
+                        <template v-slot:rodape>
+                            <button type="button" class="btn btn-primary" @click="atualizar()">Atualizar</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        </template>
+                </modal-component>
+                <!-- Fim - Modal Atualização de Marca -->
+
+                <!-- Ínicio - Modal Visualizar Marca -->
                 <modal-component
                     titulo="Visualizar Marca"
                     id="modal-visualizar">
@@ -152,9 +192,43 @@
                                 </div>
                             </div>
                         </template>
-                        <template v-slot:rodape></template>
+                        <template v-slot:rodape>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        </template>
                 </modal-component>
-                <!-- Fim - Modal Visualizar de Marca -->
+                <!-- Fim - Modal Visualizar Marca -->
+
+                <!-- Ínicio - Modal Excluir Marca -->
+                <modal-component
+                    titulo="Excluir Marca"
+                    id="modal-excluir">
+                        <template v-slot:alertas>
+                            <alert-component v-if="$store.state.alerta"
+                                :titulo="titulo"
+                                :tipo="tipo"
+                                :retorno="retorno">
+                            </alert-component>
+                        </template>
+                        <template v-slot:conteudo>
+                            <div class="form-row">
+                                <div class="col-4 mb-3">
+                                    <input-container-component label="ID">
+                                        <input type="text" class="form-control" :value="$store.state.item.id" disabled>
+                                    </input-container-component>
+                                </div>
+                                <div class="col-4 mb-3">
+                                    <input-container-component label="Nome">
+                                        <input type="text" class="form-control" :value="$store.state.item.nome" disabled>
+                                    </input-container-component>
+                                </div>
+                            </div>
+                        </template>
+                        <template v-slot:rodape>
+                            <button type="button" class="btn btn-danger" @click="excluir()">Excluir</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        </template>
+                </modal-component>
+                <!-- Fim - Modal Excluir Marca -->
 
             </div>
         </div>       
@@ -169,7 +243,6 @@
                 urlFiltro: '',
                 nomeMarca: '',
                 arquivoImagem: [],
-                alerta: false,
                 retorno: false,
                 marcas: { data : [] },
                 busca: {id: '', nome: ''}
@@ -182,14 +255,7 @@
             listar(){
                 let url = this.urlBase+'?'+this.urlPaginacao+this.urlFiltro;
 
-                let config = {
-                    headers : {
-                        'Accept' : 'application/json',
-                        'Authorization' : this.token     
-                    }
-                }
-
-                axios.get(url, config)
+                axios.get(url)
                     .then(response => {
                         this.marcas = response.data;
                     })
@@ -234,9 +300,7 @@
 
                 let config = {
                     headers : {
-                        'Content-Type' : 'multipart/form-data',
-                        'Accept' : 'application/json',
-                        'Authorization' : this.token     
+                        'Content-Type' : 'multipart/form-data'
                     }
                 }
 
@@ -247,7 +311,9 @@
                         this.retorno = {
                             mensagem: 'ID Cadastrado: '+response.data.id
                         };
-                        this.alerta = true;
+                        this.$store.state.alerta = true;
+                        novoImagem.value = '';
+                        this.listar();
                     })
                     .catch(errors => {
                         this.titulo = 'Atenção! Erro ao tentar cadastrar a marca.';
@@ -256,22 +322,82 @@
                             mensagem: errors.response.data.message,
                             erros: errors.response.data.errors
                         };
-                        this.alerta = true;
+                        this.$store.state.alerta = true;
                     }
                 );
-            }
-        },
-        computed: {
-            token(){
-                let token = document.cookie.split(';').find(
-                    indice => {
-                        return indice.trim().startsWith('token=');
+            },
+            atualizar(){
+                let url = this.urlBase + '/' + this.$store.state.item.id;
+
+                let formData = new FormData();
+
+                formData.append('_method', 'PATCH');
+                formData.append('nome', this.$store.state.item.nome);
+
+                if (this.arquivoImagem[0]){
+                    formData.append('imagem', this.arquivoImagem[0]);
+                }
+
+                let config = {
+                    headers : {
+                        'Content-Type' : 'multipart/form-data'   
+                    }
+                }
+
+                axios.post(url, formData, config)
+                    .then(response => {
+                        this.titulo = 'Cadastro atualizado com sucesso!';
+                        this.tipo = 'success';
+                        this.retorno = {
+                            mensagem: 'ID Atualizado: '+response.data.id
+                        };
+                        this.$store.state.alerta = true;
+                        atualizarImagem.value = '';
+                        this.listar();
+                    })
+                    .catch(errors => {
+                        this.titulo = 'Atenção! Erro ao tentar atualizar a marca.';
+                        this.tipo = 'danger';
+                        this.retorno = {
+                            mensagem: errors.response.data.erro,
+                            erros: errors.response.data.errors
+                        };
+                        this.$store.state.alerta = true;
                     }
                 );
+            },
+            excluir(){
+                let confirmacao = confirm('Tem certeza de que deseja excluir esse registro.');
 
-                token = token.replace('token=', 'Bearer ');
+                if (!confirmacao){
+                    return false;
+                }
 
-                return token;
+                let url = this.urlBase + '/' + this.$store.state.item.id;
+
+                let formData = new FormData();
+
+                formData.append('_method', 'DELETE');
+
+                axios.post(url, formData)
+                    .then(response => {
+                        this.titulo = 'Cadastro excluído com sucesso!';
+                        this.tipo = 'success';
+                        this.retorno = {
+                            mensagem: response.data.msg
+                        };
+                        this.$store.state.alerta = true;
+                        this.listar();
+                    })
+                    .catch(errors => {
+                        this.titulo = 'Atenção! Erro ao tentar excluir a marca.';
+                        this.tipo = 'danger';
+                        this.retorno = {
+                            mensagem: errors.response.data.erro
+                        };
+                        this.$store.state.alerta = true;
+                    }
+                );
             }
         },
         mounted() {

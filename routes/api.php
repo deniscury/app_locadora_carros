@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 });*/
 
 Route::post('login', 'AuthController@login');
+Route::post('refresh', 'AuthController@refresh');
 
 // Adiciona um prefix para versionamento da url das apis
 
@@ -29,7 +30,6 @@ Route::prefix('v1')->middleware('jwt.auth')->group(function(){
     Route::apiResource('cliente', 'ClienteController');
     Route::apiResource('locacao', 'LocacaoController');
     Route::post('me', 'AuthController@me');
-    Route::post('refresh', 'AuthController@refresh');
     Route::post('logout', 'AuthController@logout');
 });
 
