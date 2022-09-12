@@ -16,6 +16,9 @@
                         <span v-else-if="titulos[key].tipo=='date'">
                             {{ val | formataDataHora }}
                         </span>
+                        <span v-else-if="titulos[key].tipo=='array'">
+                            {{ val[titulos[key].campo]}}
+                        </span>
                         <span v-else>
                             {{val}}
                         </span>
@@ -42,25 +45,6 @@
 <script>
     export default {
         props: ['dados', 'titulos', 'visualizar', 'atualizar', 'excluir'],
-        /*filters:{
-            formataDataHora(d){
-                if (!d){
-                    return '';
-                }
-                
-                d = d.split('T');
-
-                let data = d[0];
-                let hora = d[1].substring(0, 8);
-
-                data = data.split('-');
-                data = data[2]+'/'+data[1]+'/'+data[0];
-
-                let retorno = data+' '+hora; 
-
-                return retorno;
-            }
-        },*/
         methods:{
             setStore(obj){
                 this.$store.state.alerta = false; 
@@ -70,12 +54,12 @@
         computed: {
             listar(){
                 let campos = Object.keys(this.titulos);
-
+                
                 let retorno = [];
-
+                
                 this.dados.map((item, chave) => {
                     let filtro = {};
-
+                    
                     campos.forEach(campo => {
                         filtro[campo] = item[campo];
                     });

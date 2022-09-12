@@ -39,6 +39,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('login-component', require('./components/Login.vue').default);
 Vue.component('home-component', require('./components/Home.vue').default);
 Vue.component('marcas-component', require('./components/Marcas.vue').default);
+Vue.component('modelos-component', require('./components/Modelos.vue').default);
 Vue.component('input-container-component', require('./components/InputContainer.vue').default);
 Vue.component('table-component', require('./components/Table.vue').default);
 Vue.component('card-component', require('./components/Card.vue').default);
@@ -50,7 +51,7 @@ Vue.component('paginate-component', require('./components/Paginate.vue').default
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
- */
+ */ 
 Vue.filter('formataDataHora', function(d){
     if (!d){
         return '';

@@ -180,7 +180,7 @@
                                 </div>
                                 <div class="col-4 mb-3">
                                     <input-container-component label="Data de Criação">
-                                        <input type="text" class="form-control" :value="$store.state.item.created_at" disabled>
+                                        <input type="text" class="form-control" :value="$store.state.item.created_at | formataDataHora" disabled>
                                     </input-container-component>
                                 </div>
                             </div>
@@ -367,7 +367,7 @@
                 );
             },
             excluir(){
-                let confirmacao = confirm('Tem certeza de que deseja excluir esse registro.');
+                let confirmacao = confirm('Tem certeza de que deseja excluir esse registro?');
 
                 if (!confirmacao){
                     return false;
