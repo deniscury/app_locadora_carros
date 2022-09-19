@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-10">
+            <div class="col-md-11">
 
                 <!-- Ínicio - Form de busca -->
                 <card-component
@@ -71,6 +71,10 @@
                                     id : {titulo : 'ID', tipo : 'text'},
                                     nome : {titulo : 'Nome', tipo : 'text'},
                                     imagem : {titulo : 'Imagem', tipo : 'img'},
+                                    numero_portas : {titulo : 'Portas', tipo : 'text'},
+                                    lugares : {titulo : 'Lugares', tipo : 'text'},
+                                    air_bag : {titulo : 'Airbag', tipo : 'boolean'},
+                                    abs : {titulo : 'ABS', tipo : 'boolean'},
                                     marca : {titulo : 'Marca', tipo : 'array', campo: 'nome'},
                                     created_at :{titulo : 'Data de Criação', tipo : 'date'},
                                     updated_at :{titulo : 'Data de Alteração', tipo : 'date'},
@@ -107,39 +111,101 @@
                         </template>
 
                         <template v-slot:conteudo>
-                            <div class="col mb-3">
-                                <input-container-component
-                                    id="novoNome"
-                                    label="Nome"
-                                    help="novoNomeHelp"
-                                    msg-help="Informe o nome do modelo">
-                                        <input type="text" class="form-control" id="novoNome" v-model="nomeModelo" aria-describedby="novoNomeHelp" placeholder="Nome do Modelo">
-                                </input-container-component>
-                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-6 mb-3">
+                                    <input-container-component
+                                        id="novoNome"
+                                        label="Nome"
+                                        help="novoNomeHelp"
+                                        msg-help="Informe o nome do modelo">
+                                            <input type="text" class="form-control" id="novoNome" v-model="nomeModelo" aria-describedby="novoNomeHelp" placeholder="Nome do Modelo">
+                                    </input-container-component>
+                                </div>
 
-                            <div class="col mb-3">
-                                <input-container-component
-                                    id="novaMarca"
-                                    label="Marca"
-                                    help="novaMarcaHelp"
-                                    msg-help="Informe a marca">
-                                        <select class="form-control" id="marca_id" aria-describedby="novaMarcaHelp" v-model="novaMarca">
-                                            <option 
-                                                v-for="marca, key in marcas.data" 
-                                                :key="key" 
-                                                :value="marca.id">{{marca.nome}}</option>
-                                        </select>
-                                </input-container-component>
-                            </div>
+                                <div class="col-6 mb-3">
+                                    <input-container-component
+                                        id="marcaModelo"
+                                        label="Marca"
+                                        help="marcaModeloHelp"
+                                        msg-help="Informe a marca">
+                                            <select class="form-control" id="marca_id" aria-describedby="marcaModeloHelp" v-model="marcaModelo">
+                                                <option 
+                                                    v-for="marca, key in marcas.data" 
+                                                    :key="key" 
+                                                    :value="marca.id">{{marca.nome}}</option>
+                                            </select>
+                                    </input-container-component>
+                                </div>
 
-                            <div class="col mb-3">
-                                <input-container-component
-                                    id="novoImagem"
-                                    label="Imagem"
-                                    help="novoImagemHelp"
-                                    msg-help="Selecione uma imagem no formato PNG">
-                                        <input type="file" class="form-control-file" id="novoImagem" @change="carregarImagem($event)">
-                                </input-container-component>
+                                <div class="col-6 mb-3">
+                                    <input-container-component
+                                        id="portasModelo"
+                                        label="Número de Portas"
+                                        help="portasModeloHelp"
+                                        msg-help="Quantas portas?">
+                                            <select class="form-control" id="numero_portas" aria-describedby="portasModeloHelp" v-model="portasModelo">
+                                                <option 
+                                                    v-for="portas, key in [2, 5]" 
+                                                    :key="key" 
+                                                    :value="portas">{{portas}}</option>
+                                            </select>
+                                    </input-container-component>
+                                </div>
+
+                                <div class="col-6 mb-3">
+                                    <input-container-component
+                                        id="lugaresModelo"
+                                        label="Lugares"
+                                        help="lugaresModeloHelp"
+                                        msg-help="Quantos lugares?">
+                                            <select class="form-control" id="lugares" aria-describedby="lugaresModeloHelp" v-model="lugaresModelo">
+                                                <option 
+                                                    v-for="lugares, key in [2, 7]" 
+                                                    :key="key" 
+                                                    :value="lugares">{{lugares}}</option>
+                                            </select>
+                                    </input-container-component>
+                                </div>
+
+                                <div class="col-6 mb-3">
+                                    <input-container-component
+                                        id="airbagModelo"
+                                        label="ABS"
+                                        help="absModeloHelp"
+                                        msg-help="Tem airbag?">
+                                            <select class="form-control" id="air_bag" aria-describedby="airbagModeloHelp" v-model="airbagModelo">
+                                                <option 
+                                                    v-for="airbag, key in [0, 1]" 
+                                                    :key="key" 
+                                                    :value="abs">{{airbag | verificaBooleano}}</option>
+                                            </select>
+                                    </input-container-component>
+                                </div>
+
+                                <div class="col-6 mb-3">
+                                    <input-container-component
+                                        id="absModelo"
+                                        label="ABS"
+                                        help="absModeloHelp"
+                                        msg-help="Tem ABS?">
+                                            <select class="form-control" id="abs" aria-describedby="absModeloHelp" v-model="absModelo">
+                                                <option 
+                                                    v-for="abs, key in [0, 1]" 
+                                                    :key="key" 
+                                                    :value="abs">{{abs | verificaBooleano}}</option>
+                                            </select>
+                                    </input-container-component>
+                                </div>
+
+                                <div class="col-12 mb-3">
+                                    <input-container-component
+                                        id="novoImagem"
+                                        label="Imagem"
+                                        help="novoImagemHelp"
+                                        msg-help="Selecione uma imagem no formato PNG">
+                                            <input type="file" class="form-control-file" id="novoImagem" @change="carregarImagem($event)">
+                                    </input-container-component>
+                                </div>
                             </div>
                         </template>
                         <template v-slot:rodape>
@@ -211,7 +277,7 @@
                         <template v-slot:alertas></template>
                         <template v-slot:conteudo>
                             <div class="form-row">
-                                <div class="col-6 mb-3">
+                                <div class="col-2 mb-3">
                                     <input-container-component label="ID">
                                         <input type="text" class="form-control" :value="$store.state.item.id" disabled>
                                     </input-container-component>
@@ -221,14 +287,38 @@
                                         <input type="text" class="form-control" :value="$store.state.item.nome" disabled>
                                     </input-container-component>
                                 </div>
-                                <div class="col-6 mb-3">
+                                <div class="col-4 mb-3">
                                     <input-container-component label="Marca">
                                         <input type="text" class="form-control" :value="$store.state.item.marca.nome" disabled>
+                                    </input-container-component>
+                                </div><div class="col-3 mb-3">
+                                    <input-container-component label="Portas">
+                                        <input type="text" class="form-control" :value="$store.state.item.numero_portas" disabled>
+                                    </input-container-component>
+                                </div>
+                                <div class="col-3 mb-3">
+                                    <input-container-component label="Lugares">
+                                        <input type="text" class="form-control" :value="$store.state.item.lugares" disabled>
+                                    </input-container-component>
+                                </div>
+                                <div class="col-3 mb-3">
+                                    <input-container-component label="Airbag">
+                                        <input type="text" class="form-control" :value="$store.state.item.air_bag | verificaBooleano" disabled>
+                                    </input-container-component>
+                                </div>
+                                <div class="col-3 mb-3">
+                                    <input-container-component label="ABS">
+                                        <input type="text" class="form-control" :value="$store.state.item.abs | verificaBooleano" disabled>
                                     </input-container-component>
                                 </div>
                                 <div class="col-6 mb-3">
                                     <input-container-component label="Data de Criação">
                                         <input type="text" class="form-control" :value="$store.state.item.created_at | formataDataHora" disabled>
+                                    </input-container-component>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <input-container-component label="Data de Alteração">
+                                        <input type="text" class="form-control" :value="$store.state.item.updated_at | formataDataHora" disabled>
                                     </input-container-component>
                                 </div>
                             </div>
@@ -291,8 +381,12 @@
                 urlPaginacao: '',
                 urlFiltro: '',
                 nomeModelo: '',
+                marcaModelo: [],
+                portasModelo: 2,
+                lugaresModelo: 2,
+                airbagModelo: 0,
+                absModelo: 0,
                 arquivoImagem: [],
-                nomeModelo: '',
                 retorno: false,
                 modelos: { data : [] },
                 marcas: { data : [] },

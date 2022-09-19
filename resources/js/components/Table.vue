@@ -19,6 +19,9 @@
                         <span v-else-if="titulos[key].tipo=='array'">
                             {{ val[titulos[key].campo]}}
                         </span>
+                        <span v-else-if="titulos[key].tipo=='boolean'">
+                            {{ val ? 'Sim' : 'Não' }}
+                        </span>
                         <span v-else>
                             {{val}}
                         </span>

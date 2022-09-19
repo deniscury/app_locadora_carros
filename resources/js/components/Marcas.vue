@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-10">
+            <div class="col-md-11">
 
                 <!-- Ínicio - Form de busca -->
                 <card-component
@@ -168,19 +168,24 @@
                         <template v-slot:alertas></template>
                         <template v-slot:conteudo>
                             <div class="form-row">
-                                <div class="col-4 mb-3">
+                                <div class="col-2 mb-3">
                                     <input-container-component label="ID">
                                         <input type="text" class="form-control" :value="$store.state.item.id" disabled>
                                     </input-container-component>
                                 </div>
-                                <div class="col-4 mb-3">
+                                <div class="col-10 mb-3">
                                     <input-container-component label="Nome">
                                         <input type="text" class="form-control" :value="$store.state.item.nome" disabled>
                                     </input-container-component>
                                 </div>
-                                <div class="col-4 mb-3">
+                                <div class="col-6 mb-3">
                                     <input-container-component label="Data de Criação">
                                         <input type="text" class="form-control" :value="$store.state.item.created_at | formataDataHora" disabled>
+                                    </input-container-component>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <input-container-component label="Data de Alteração">
+                                        <input type="text" class="form-control" :value="$store.state.item.updated_at | formataDataHora" disabled>
                                     </input-container-component>
                                 </div>
                             </div>

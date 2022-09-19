@@ -70,6 +70,18 @@ Vue.filter('formataDataHora', function(d){
     return retorno;
 });
 
+Vue.filter('verificaBooleano', function(v){
+    let retorno = '';
+    if (v){
+        retorno = 'Sim'
+    }
+    else{
+        retorno = 'Não'
+    }
+
+    return retorno
+})
+
 const app = new Vue({
     el: '#app',
     store
