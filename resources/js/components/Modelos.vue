@@ -145,7 +145,7 @@
                                         msg-help="Quantas portas?">
                                             <select class="form-control" id="numero_portas" aria-describedby="portasModeloHelp" v-model="portasModelo">
                                                 <option 
-                                                    v-for="portas, key in [2, 5]" 
+                                                    v-for="portas, key in [2, 3, 4, 5]" 
                                                     :key="key" 
                                                     :value="portas">{{portas}}</option>
                                             </select>
@@ -160,7 +160,7 @@
                                         msg-help="Quantos lugares?">
                                             <select class="form-control" id="lugares" aria-describedby="lugaresModeloHelp" v-model="lugaresModelo">
                                                 <option 
-                                                    v-for="lugares, key in [2, 7]" 
+                                                    v-for="lugares, key in [2, 3, 4, 5, 6, 7]" 
                                                     :key="key" 
                                                     :value="lugares">{{lugares}}</option>
                                             </select>
@@ -170,14 +170,14 @@
                                 <div class="col-6 mb-3">
                                     <input-container-component
                                         id="airbagModelo"
-                                        label="ABS"
+                                        label="Airbag"
                                         help="absModeloHelp"
                                         msg-help="Tem airbag?">
                                             <select class="form-control" id="air_bag" aria-describedby="airbagModeloHelp" v-model="airbagModelo">
                                                 <option 
                                                     v-for="airbag, key in [0, 1]" 
                                                     :key="key" 
-                                                    :value="abs">{{airbag | verificaBooleano}}</option>
+                                                    :value="airbag">{{airbag | verificaBooleano}}</option>
                                             </select>
                                     </input-container-component>
                                 </div>
@@ -244,7 +244,7 @@
                                     label="Marca"
                                     help="atualizarMarcaHelp"
                                     msg-help="Informe a marca">
-                                        <select class="form-control" id="marca_id" aria-describedby="atualizarMarcaHelp" v-model="$store.state.item.marca.id">
+                                        <select class="form-control" id="marca_id" aria-describedby="atualizarMarcaHelp" v-model="$store.state.item.marca">
                                             <option 
                                                 v-for="marca, key in marcas.data" 
                                                 :key="key" 
@@ -399,7 +399,7 @@
             },
             listar(){
                 let url = this.urlBase+'?'+this.urlPaginacao+this.urlFiltro;
-
+                
                 axios.get(url)
                     .then(response => {
                         this.modelos = response.data;
