@@ -192,7 +192,7 @@
                             <div class="form-row text-center">
                                 <div class="col-12 mb-3">
                                     <input-container-component>
-                                        <img v-if="$store.state.item.imagem" :src="'/storage/'+$store.state.item.imagem"/>
+                                        <img v-if="$store.state.item.imagem" :src="'/storage/'+$store.state.item.imagem" width="300" height="300"/>
                                     </input-container-component>
                                 </div>
                             </div>

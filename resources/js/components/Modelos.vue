@@ -114,11 +114,11 @@
                             <div class="row justify-content-center">
                                 <div class="col-6 mb-3">
                                     <input-container-component
-                                        id="novoNome"
+                                        id="nomeModelo"
                                         label="Nome"
-                                        help="novoNomeHelp"
+                                        help="nomeModeloHelp"
                                         msg-help="Informe o nome do modelo">
-                                            <input type="text" class="form-control" id="novoNome" v-model="nomeModelo" aria-describedby="novoNomeHelp" placeholder="Nome do Modelo">
+                                            <input type="text" class="form-control" id="nome" v-model="nomeModelo" aria-describedby="nomeModeloHelp" placeholder="Nome do Modelo">
                                     </input-container-component>
                                 </div>
 
@@ -171,7 +171,7 @@
                                     <input-container-component
                                         id="airbagModelo"
                                         label="Airbag"
-                                        help="absModeloHelp"
+                                        help="airbagModeloHelp"
                                         msg-help="Tem airbag?">
                                             <select class="form-control" id="air_bag" aria-describedby="airbagModeloHelp" v-model="airbagModelo">
                                                 <option 
@@ -228,41 +228,104 @@
                         </template>
 
                         <template v-slot:conteudo>
-                            <div class="col mb-3">
-                                <input-container-component
-                                    id="atualizarNome"
-                                    label="Nome"
-                                    help="atualizarNomeHelp"
-                                    msg-help="Informe o nome do modelo">
-                                        <input type="text" class="form-control" id="atualizarNome" v-model="$store.state.item.nome" aria-describedby="atualizarNomeHelp" placeholder="Nome do Modelo">
-                                </input-container-component>
-                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-6 mb-3">
+                                    <input-container-component
+                                        id="atualizarNome"
+                                        label="Nome"
+                                        help="atualizarNomeHelp"
+                                        msg-help="Informe o nome do modelo">
+                                            <input type="text" class="form-control" id="nome" v-model="$store.state.item.nome" aria-describedby="atualizarNomeHelp" placeholder="Nome do Modelo">
+                                    </input-container-component>
+                                </div>
 
-                            <div class="col mb-3">
-                                <input-container-component
-                                    id="atualizarMarca"
-                                    label="Marca"
-                                    help="atualizarMarcaHelp"
-                                    msg-help="Informe a marca">
-                                        <select class="form-control" id="marca_id" aria-describedby="atualizarMarcaHelp" v-model="$store.state.item.marca">
-                                            <option 
-                                                v-for="marca, key in marcas.data" 
-                                                :key="key" 
-                                                :value="marca.id">{{marca.nome}}</option>
-                                        </select>
-                                </input-container-component>
-                            </div>
+                                <div class="col-6 mb-3">
+                                    <input-container-component
+                                        id="atualizarMarca"
+                                        label="Marca"
+                                        help="atualizarMarcaHelp"
+                                        msg-help="Informe a marca">
+                                            <select class="form-control" id="marca_id" aria-describedby="atualizarMarcaHelp" v-model="$store.state.item.marca.id">
+                                                <option 
+                                                    v-for="marca, key in marcas.data" 
+                                                    :key="key" 
+                                                    :value="marca.id">{{marca.nome}}</option>
+                                            </select>
+                                    </input-container-component>
+                                </div>
 
-                            <div class="col mb-3">
-                                <input-container-component
-                                    id="atualizarImagem"
-                                    label="Imagem"
-                                    help="atualizarImagemHelp"
-                                    msg-help="Selecione uma imagem no formato PNG">
-                                        <input type="file" class="form-control-file" id="atualizarImagem" aria-describedby="atualizarImagemHelp" @change="carregarImagem($event)">
-                                </input-container-component>
+                                <div class="col-6 mb-3">
+                                    <input-container-component
+                                        id="atualizarPortas"
+                                        label="Número de Portas"
+                                        help="atualizarPortasHelp"
+                                        msg-help="Quantas portas?">
+                                            <select class="form-control" id="numero_portas" aria-describedby="atualizarPortasHelp" v-model="$store.state.item.numero_portas">
+                                                <option 
+                                                    v-for="portas, key in [2, 3, 4, 5]" 
+                                                    :key="key" 
+                                                    :value="portas">{{portas}}</option>
+                                            </select>
+                                    </input-container-component>
+                                </div>
+
+                                <div class="col-6 mb-3">
+                                    <input-container-component
+                                        id="atualizarLugares"
+                                        label="Lugares"
+                                        help="atualizarLugaresHelp"
+                                        msg-help="Quantos lugares?">
+                                            <select class="form-control" id="lugares" aria-describedby="atualizarLugaresHelp" v-model="$store.state.item.lugares">
+                                                <option 
+                                                    v-for="lugares, key in [2, 3, 4, 5, 6, 7]" 
+                                                    :key="key" 
+                                                    :value="lugares">{{lugares}}</option>
+                                            </select>
+                                    </input-container-component>
+                                </div>
+
+                                <div class="col-6 mb-3">
+                                    <input-container-component
+                                        id="atualizarAirbag"
+                                        label="Airbag"
+                                        help="atualizarAirbagHelp"
+                                        msg-help="Tem airbag?">
+                                            <select class="form-control" id="air_bag" aria-describedby="atualizarAirbagHelp" v-model="$store.state.item.air_bag">
+                                                <option 
+                                                    v-for="airbag, key in [0, 1]" 
+                                                    :key="key" 
+                                                    :value="airbag">{{airbag | verificaBooleano}}</option>
+                                            </select>
+                                    </input-container-component>
+                                </div>
+
+                                <div class="col-6 mb-3">
+                                    <input-container-component
+                                        id="atualizarAbs"
+                                        label="ABS"
+                                        help="atualizarAbsHelp"
+                                        msg-help="Tem ABS?">
+                                            <select class="form-control" id="abs" aria-describedby="atualizarAbsHelp" v-model="$store.state.item.abs">
+                                                <option 
+                                                    v-for="abs, key in [0, 1]" 
+                                                    :key="key" 
+                                                    :value="abs">{{abs | verificaBooleano}}</option>
+                                            </select>
+                                    </input-container-component>
+                                </div>
+
+                                <div class="col-12 mb-3">
+                                    <input-container-component
+                                        id="atualizarImagem"
+                                        label="Imagem"
+                                        help="atualizarImagemHelp"
+                                        msg-help="Selecione uma imagem no formato PNG">
+                                            <input type="file" class="form-control-file" id="atualizarImagem" @change="carregarImagem($event)">
+                                    </input-container-component>
+                                </div>
                             </div>
                         </template>
+
                         <template v-slot:rodape>
                             <button type="button" class="btn btn-primary" @click="atualizar()">Atualizar</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
@@ -289,7 +352,7 @@
                                 </div>
                                 <div class="col-4 mb-3">
                                     <input-container-component label="Marca">
-                                        <input type="text" class="form-control" :value="$store.state.item.marca.nome" disabled>
+                                        <input type="text" class="form-control" :value="$store.state.item.marca_id" disabled>
                                     </input-container-component>
                                 </div><div class="col-3 mb-3">
                                     <input-container-component label="Portas">
@@ -325,7 +388,7 @@
                             <div class="form-row text-center">
                                 <div class="col-12 mb-3">
                                     <input-container-component>
-                                        <img v-if="$store.state.item.imagem" :src="'/storage/'+$store.state.item.imagem"/>
+                                        <img v-if="$store.state.item.imagem" :src="'/storage/'+$store.state.item.imagem" width="300" height="300"/>
                                     </input-container-component>
                                 </div>
                             </div>
@@ -381,7 +444,7 @@
                 urlPaginacao: '',
                 urlFiltro: '',
                 nomeModelo: '',
-                marcaModelo: [],
+                marcaModelo: 0,
                 portasModelo: 2,
                 lugaresModelo: 2,
                 airbagModelo: 0,
@@ -453,7 +516,11 @@
                 let formData = new FormData();
 
                 formData.append('nome', this.nomeModelo);
-                formData.append('nomeModelo', this.$store.state.item.nomeModelo);
+                formData.append('marca_id', this.marcaModelo);
+                formData.append('numero_portas', this.portasModelo);
+                formData.append('lugares', this.lugaresModelo);
+                formData.append('air_bag', this.airbagModelo);
+                formData.append('abs', this.absModelo);
                 formData.append('imagem', this.arquivoImagem[0]);
 
                 let config = {
@@ -491,6 +558,11 @@
 
                 formData.append('_method', 'PATCH');
                 formData.append('nome', this.$store.state.item.nome);
+                formData.append('marca_id', this.$store.state.item.marca.id);
+                formData.append('numero_portas', this.$store.state.item.numero_portas);
+                formData.append('lugares', this.$store.state.item.lugares);
+                formData.append('air_bag', this.$store.state.item.air_bag);
+                formData.append('abs', this.$store.state.item.abs);
                 formData.append('nomeModelo', this.$store.state.item.nomeModelo);
 
                 if (this.arquivoImagem[0]){

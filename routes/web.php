@@ -32,3 +32,9 @@ Route::get('/veiculos/modelos', function(){
     })
     ->name('modelos')
     ->middleware('auth');
+
+Route::get('/veiculos/carros', function(){
+        return view('veiculos.carros');
+    })
+    ->name('carros')
+    ->middleware('auth');

@@ -47,7 +47,7 @@
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{{route('modelos')}}">Modelos</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Carros</a>
+                                    <a class="dropdown-item" href="{{route('carros')}}">Carros</a>
                                 </div>
                             </li>
                         @endauth
