@@ -5,7 +5,7 @@
 
                 <!-- Ínicio - Form de busca -->
                 <card-component
-                    titulo="Busca de Modelos">
+                    titulo="Busca de Carros">
                         <template v-slot:conteudo>
                             <div class="form-row">
                                 <div class="col mb-3">
@@ -32,9 +32,21 @@
                                         label="Marca"
                                         help="marcaHelp"
                                         msg-help="Informe a marca">
-                                            <select class="form-control" id="marca_id" aria-describedby="marcaHelp" v-model="busca.marca_id">
+                                            <select class="form-control" id="marca_id" aria-describedby="marcaHelp" v-model="busca.marca_id" @change="listarModelos()">
                                                 <option value="">Todos</option>
                                                 <option v-for="marca, key in marcas.data" :key="key" :value="marca.id">{{marca.nome}}</option>
+                                            </select>
+                                    </input-container-component>
+                                </div>
+                                <div class="col mb-3">
+                                    <input-container-component
+                                        id="modelo_id"
+                                        label="Modelo"
+                                        help="modeloHelp"
+                                        msg-help="Informe o modelo">
+                                            <select class="form-control" id="modelo_id" aria-describedby="modeloHelp" v-model="busca.modelo_id">
+                                                <option value="">Todos</option>
+                                                <option v-for="modelo, key in modelos.data" :key="key" :value="modelo.id">{{modelo.nome}}</option>
                                             </select>
                                     </input-container-component>
                                 </div>
@@ -128,7 +140,7 @@
                                         label="Marca"
                                         help="marcaModeloHelp"
                                         msg-help="Informe a marca">
-                                            <select class="form-control" id="marca_id" aria-describedby="marcaModeloHelp" v-model="marcaModelo">
+                                            <select class="form-control" id="modelo_id" aria-describedby="marcaModeloHelp" v-model="marcaModelo">
                                                 <option 
                                                     v-for="marca, key in marcas.data" 
                                                     :key="key" 
@@ -454,7 +466,8 @@
                 retorno: false,
                 carros: { data : [] },
                 marcas: { data : [] },
-                busca: {id: '', nome: '', marca: ''}
+                modelos: { data : [] },
+                busca: {id: '', nome: '', marca_id: '', modelo_id: ''}
             }
         },
         methods:{
@@ -481,6 +494,27 @@
                 axios.get(url)
                     .then(response => {
                         this.marcas = response;
+                    })
+                    .catch(errors => {
+                        console.log(errors);
+                    }
+                );
+            },
+            listarModelos(){
+                let filtro = '';
+                let url = this.urlModelos;
+
+                if (this.busca['marca_id']){
+                    filtro = ('marca_id:like:'+this.busca['marca_id']);
+                }
+
+                if (filtro !== ''){       
+                    url += '&filtros='+filtro;
+                }
+
+                axios.get(url)
+                    .then(response => {
+                        this.modelos = response;
                     })
                     .catch(errors => {
                         console.log(errors);
@@ -637,6 +671,7 @@
         mounted() {
             this.listar();
             this.listarMarcas();
+            this.listarModelos();
         }
     }
 </script>

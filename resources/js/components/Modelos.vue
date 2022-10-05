@@ -453,7 +453,7 @@
                 retorno: false,
                 modelos: { data : [] },
                 marcas: { data : [] },
-                busca: {id: '', nome: '', marca: ''}
+                busca: {id: '', nome: '', marca_id: ''}
             }
         },
         methods:{
